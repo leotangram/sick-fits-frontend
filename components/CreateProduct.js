@@ -1,13 +1,36 @@
+import { useMutation } from '@apollo/client'
+import gql from 'graphql-tag'
 import useForm from '../lib/useForm'
+import DisplayError from './ErrorMessage'
 import Form from './styles/Form'
 
+const CREATE_PRODUCT_MUTATION = gql`
+  mutation CREATE_PRODUCT_MUTATION(
+    # Which variables are getting passed in? And what types are they
+    $name: String!
+    $description: String!
+    $price: Int!
+    $image: Upload
+  ) {
+    createProduct(
+      data: {
+        name: $name
+        description: $description
+        price: $price
+        status: "AVAILABLE"
+        photo: { create: { image: $image, altText: $name } }
+      }
+    ) {
+      id
+      price
+      description
+      name
+    }
+  }
+`
+
 const CreateProduct = props => {
-  const {
-    clearForm,
-    handleChange,
-    inputs: { description, image, name, price },
-    resetForm
-  } = useForm({
+  const { clearForm, handleChange, inputs } = useForm({
     description: '',
     image: '',
     name: 'Nice shoes',
@@ -15,13 +38,25 @@ const CreateProduct = props => {
     description: 'These are the best shoes!'
   })
 
-  const handleSubmit = (e) => {
+  const { description, image, name, price } = inputs
+
+  const [createProduct, { loading, error, data }] = useMutation(
+    CREATE_PRODUCT_MUTATION,
+    {
+      variables: inputs
+    }
+  )
+
+  const handleSubmit = async e => {
     e.preventDefault()
+    await createProduct()
+    clearForm()
   }
 
   return (
     <Form onSubmit={handleSubmit}>
-      <fieldset>
+      <DisplayError error={error} />
+      <fieldset aria-busy={loading} disabled={loading}>
         <label htmlFor="image">
           Image
           <input
@@ -56,7 +91,7 @@ const CreateProduct = props => {
         </label>
         <label htmlFor="description">
           Description
-          <textarea 
+          <textarea
             id="description"
             name="description"
             placeholder="Description"
