@@ -1,3 +1,4 @@
+import Router from 'next/router'
 import { useMutation } from '@apollo/client'
 import gql from 'graphql-tag'
 import useForm from '../lib/useForm'
@@ -51,8 +52,11 @@ const CreateProduct = props => {
 
   const handleSubmit = async e => {
     e.preventDefault()
-    await createProduct()
+    const {data} = await createProduct()
     clearForm()
+    Router.push({
+      pathname: `/product/${data.createProduct.id}`
+    })
   }
 
   return (
