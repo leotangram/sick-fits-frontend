@@ -43,7 +43,7 @@ const UpdateProduct = ({ id }) => {
 
   const [
     updateProduct,
-    { data: updateData, error: updateError, loading: updateLoading }
+    { error: updateError, loading: updateLoading }
   ] = useMutation(UPDATE_PRODUCT_MUTATION)
 
   const { handleChange, inputs } = useForm(data?.Product)
