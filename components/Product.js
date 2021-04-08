@@ -4,6 +4,7 @@ import ItemStyles from './styles/ItemStyles'
 import Title from './styles/Title'
 import PriceTag from './styles/PriceTag'
 import formatMoney from '../lib/formatMoney'
+import DeletProduct from './DeletProduct'
 
 const Product = ({
   description,
@@ -24,6 +25,7 @@ const Product = ({
       <p>{description}</p>
       <div className="buttonList">
         <Link href={{ pathname: 'update', query: { id } }}>Edit ✏️</Link>
+        <DeletProduct id={id}>Delete</DeletProduct>
       </div>
     </ItemStyles>
   )
