@@ -22,7 +22,9 @@ const Product = ({
       </Title>
       <PriceTag>{formatMoney(price)}</PriceTag>
       <p>{description}</p>
-      {/* TODO: Add buttons to edit and delete item */}
+      <div className="buttonList">
+        <Link href={{ pathname: 'update', query: { id } }}>Edit ✏️</Link>
+      </div>
     </ItemStyles>
   )
 }
@@ -32,7 +34,7 @@ Product.defaultProps = {
   id: '',
   name: '',
   price: 0,
-  publicUrlTransformed: '',
+  publicUrlTransformed: ''
 }
 
 Product.propTypes = {
